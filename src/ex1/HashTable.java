@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Implementació d'una taula de hash sense col·lisions.
  * Original source code: https://gist.github.com/amadamala/3cdd53cb5a6b1c1df540981ab0245479
  */
-public class ex1 {
+public class HashTable {
     private int SIZE = 16;
     private int ITEMS = 0;
     private HashEntry[] entries = new HashEntry[SIZE];
@@ -26,6 +26,7 @@ public class ex1 {
      * Permet afegir un nou element a la taula.
      * @param key La clau de l'element a afegir.
      * @param value El propi element que es vol afegir.
+     * @return
      */
     public void put(String key, String value) {
         int hash = getHash(key);
@@ -211,14 +212,13 @@ public class ex1 {
     }
 
     public static void main(String[] args) {
-        ex1 hashTable = new ex1();
+        HashTable hashTable = new HashTable();
         
         // Put some key values.
         for(int i=0; i<30; i++) {
             final String key = String.valueOf(i);
             hashTable.put(key, key);
         }
-
         // Print the HashTable structure
         log("****   HashTable  ***");
         log(hashTable.toString());
