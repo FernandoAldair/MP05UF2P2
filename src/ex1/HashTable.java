@@ -43,6 +43,7 @@ public class HashTable {
             temp.next = hashEntry;
             hashEntry.prev = temp;
         }
+        ITEMS++;
     }
 
     /**
