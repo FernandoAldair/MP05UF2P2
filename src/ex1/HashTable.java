@@ -28,6 +28,7 @@ public class HashTable {
      * @param value El propi element que es vol afegir.
      * @return
      */
+
     public void put(String key, String value) {
         int hash = getHash(key);
         final HashEntry hashEntry = new HashEntry(key, value);
@@ -43,8 +44,26 @@ public class HashTable {
             temp.next = hashEntry;
             hashEntry.prev = temp;
         }
-        ITEMS++;
+        ITEMS++; //Añade un Item para que el contador sume
     }
+
+//    public void put(String key, String value) {
+//        int hash = getHash(key);
+//        final HashEntry hashEntry = new HashEntry(key, value);
+//
+//        if(entries[hash] == null) {
+//            entries[hash] = hashEntry;
+//        }
+//        else {
+//            HashEntry temp = entries[hash];
+//            while(temp.next != null)
+//                temp = temp.next;
+//
+//            temp.next = hashEntry;
+//            hashEntry.prev = temp;
+//        }
+//        ITEMS++; //Añade un Item para que el contador sume
+//    }
 
     /**
      * Permet recuperar un element dins la taula.
@@ -70,20 +89,48 @@ public class HashTable {
      * @param key La clau de l'element a trobar.
      */
     public void drop(String key) {
+        //Busca donde se encuentra la key
         int hash = getHash(key);
+        //comprueba si dentro del hash hay algo
         if(entries[hash] != null) {
 
             HashEntry temp = entries[hash];
+            //Comprueba que la key que esta leyendo no sea igual que la key seleccionada
             while( !temp.key.equals(key))
+                //Pasa a la siguiente key
                 temp = temp.next;
 
-            if(temp.prev == null) entries[hash] = null;             //esborrar element únic (no col·lissió)
-            else{
+            //Borro el primero
+            if(temp.prev == null) {
+                if (temp.next != null)
+                    temp.next.prev = null;
+                entries[hash] = temp.next;
+            }
+            else {
                 if(temp.next != null) temp.next.prev = temp.prev;   //esborrem temp, per tant actualitzem l'anterior al següent
                 temp.prev.next = temp.next;                         //esborrem temp, per tant actualitzem el següent de l'anterior
             }
+            //Le resto uno a los items
+            ITEMS--;
         }
     }
+
+//    public void drop(String key) {
+//        int hash = getHash(key);
+//
+//        if(entries[hash] != null) {
+//
+//            HashEntry temp = entries[hash];
+//            while( !temp.key.equals(key))
+//                temp = temp.next;
+//
+//            if(temp.prev == null) entries[hash] = null;             //esborrar element únic (no col·lissió)
+//            else{
+//                if(temp.next != null) temp.next.prev = temp.prev;   //esborrem temp, per tant actualitzem l'anterior al següent
+//                temp.prev.next = temp.next;                         //esborrem temp, per tant actualitzem el següent de l'anterior
+//            }
+//        }
+//    }
 
     private int getHash(String key) {
         // piggy backing on java string
