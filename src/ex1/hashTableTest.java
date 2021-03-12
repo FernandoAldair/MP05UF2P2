@@ -8,12 +8,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class hashTableTest {
 
     //Hay 6 errores:
-    //1- No suma, no resta
-    //2- drop borrar el primero ( borra toda la fila)
-    //3-
-    //4-
-    //5-
-    //6-
+    //- put:
+    //  1- No suma
+    //  2- Se duplica
+    //  3- añadir algo*
+    //- drop
+    //  4- No resta
+    //  5- Borra una fila entera si el elemento que queremos borrar es el primero
+    //  6- Borrar algo que no existe
+
 
     @org.junit.jupiter.api.Test
     void count() {
@@ -85,13 +88,32 @@ class hashTableTest {
     @org.junit.jupiter.api.Test
     void getSinColision() {
         HashTable hashTable = new HashTable();
+
         hashTable.put("1","mundo1");
         hashTable.put("2","mundo2");
         hashTable.put("3","mundo3");
         hashTable.put("4","mundo4");
 
-        Assertions.assertEquals("mundo3",hashTable.get("3"));
+        Assertions.assertEquals("\n" +
+                " bucket[1] = [1, mundo1]\n" +
+                " bucket[2] = [2, mundo2]\n" +
+                " bucket[3] = [3, mundo3]\n" +
+                " bucket[4] = [4, mundo4]",hashTable.toString());
 
+        hashTable.put("2","otra_cosa");
+        hashTable.put("3","otra_cosa");
+
+        Assertions.assertEquals("\n" +
+                " bucket[1] = [1, mundo1]\n" +
+                " bucket[2] = [2, otra_cosa]\n" +
+                " bucket[3] = [3, otra_cosa]\n" +
+                " bucket[4] = [4, mundo4]",hashTable.toString());
+
+
+        Assertions.assertEquals("otra_cosa",hashTable.get("3"));
+
+        //Error no existe
+//        Assertions.assertEquals("", hashTable.get("6"));
     }
 
     @org.junit.jupiter.api.Test
@@ -99,10 +121,14 @@ class hashTableTest {
         HashTable hashTable = new HashTable();
         hashTable.put("1","mundo1");
         hashTable.put("2","mundo2");
-        hashTable.put("3","mundo3");
-        hashTable.put("4","mundo4");
-
         hashTable.put("13","mundo13");
+        hashTable.put("3","mundo3");
+        hashTable.put("14","mundo14");
+
+        Assertions.assertEquals("\n" +
+                " bucket[1] = [1, mundo1]\n" +
+                " bucket[2] = [2, mundo2] -> [13, mundo13]\n" +
+                " bucket[3] = [3, mundo3] -> [14, mundo14]",hashTable.toString());
 
         Assertions.assertEquals("mundo13",hashTable.get("13"));
 
@@ -133,20 +159,42 @@ class hashTableTest {
                 " bucket[3] = [3, mundo3] -> [14, mundo14] -> [25, mundo25]\n" +
                 " bucket[4] = [4, mundo4]",hashTable.toString());
 
+        //Borrar el primero
         hashTable.drop("2");
+        //Borrar el ultimo
         hashTable.drop("25");
+        //Borrar en medio
         hashTable.drop("12");
+        //Borrar en medio
         hashTable.drop("23");
+        //Borrar unico valor
         hashTable.drop("4");
 
-
+        hashTable.drop("37");
 
         Assertions.assertEquals("\n" +
                 " bucket[1] = [1, mundo1] -> [34, mundo34]\n" +
                 " bucket[2] = [13, mundo13] -> [24, mundo24]\n" +
-                " bucket[3] = [3, mundo3] -> [14, mundo14]\n" +
-                " bucket[4] = ",hashTable.toString());
+                " bucket[3] = [3, mundo3] -> [14, mundo14]", hashTable.toString());
 
+        Assertions.assertEquals(6,hashTable.count());
+    }
 
+    @org.junit.jupiter.api.Test
+    void dropAlgoinexistente() {
+        //No puedes borrar algo que no existe
+        HashTable hashTable = new HashTable();
+        hashTable.put("1","mundo1");
+        hashTable.put("12","mundo1");
+        hashTable.drop("23");
+    }
+
+    @org.junit.jupiter.api.Test
+    void get12() {
+        //No puedes borrar algo que no existe
+        HashTable hashTable = new HashTable();
+        hashTable.put("1","mundo1");
+        hashTable.get("12");
+        Assertions.assertEquals(null,hashTable.get("12"));
     }
 }

@@ -32,19 +32,27 @@ public class HashTable {
     public void put(String key, String value) {
         int hash = getHash(key);
         final HashEntry hashEntry = new HashEntry(key, value);
-
+        //ssi el hash esta vacio lo añadimos
         if(entries[hash] == null) {
             entries[hash] = hashEntry;
+            //Añade un Item para que el contador sume
+            ITEMS++;
         }
         else {
             HashEntry temp = entries[hash];
-            while(temp.next != null)
-                temp = temp.next;
+            //Si la key es igual a la key que quiero añadir la actualiza
+            if (entries[hash].key.equals(hashEntry.key)){
+                //Se actualiza la tabla
+                entries[hash] = hashEntry;
+            }else {
+                while(temp.next != null)
+                    temp = temp.next;
 
-            temp.next = hashEntry;
-            hashEntry.prev = temp;
+                temp.next = hashEntry;
+                hashEntry.prev = temp;
+                ITEMS++;
+            }
         }
-        ITEMS++; //Añade un Item para que el contador sume
     }
 
 //    public void put(String key, String value) {
@@ -74,11 +82,13 @@ public class HashTable {
         int hash = getHash(key);
         if(entries[hash] != null) {
             HashEntry temp = entries[hash];
-
-            while( !temp.key.equals(key))
+            HashEntry tempnull = entries[hash];
+            while( !temp.key.equals(key) && tempnull.next != null)
                 temp = temp.next;
 
-            return temp.value;
+            if (temp.key.equals(key)){
+                return temp.value;
+            }else return null;
         }
 
         return null;
@@ -95,23 +105,40 @@ public class HashTable {
         if(entries[hash] != null) {
 
             HashEntry temp = entries[hash];
+            HashEntry tempnull = entries[hash];
             //Comprueba que la key que esta leyendo no sea igual que la key seleccionada
-            while( !temp.key.equals(key))
+            while(!temp.key.equals(key) && tempnull.next != null)// si hay una linea creada no hace nada
+                //si hay una key dentro la busca y si
                 //Pasa a la siguiente key
-                temp = temp.next;
+                    temp = temp.next;
 
-            //Borro el primero
-            if(temp.prev == null) {
-                if (temp.next != null)
+
+            //Borrar el primero
+            //Si anteriormente no hay nada
+            if(temp.prev == null) { //Borra el primer el elemento y modifica el prev y next
+                //si hay algo despues
+                if (temp.next == null){
+                    entries[hash] = null; //borra un unico elemento
+                }
+                else if (temp.next != null) {
+                    //la key principal pasa a ser la siguiente y el prev pasa a ser null
                     temp.next.prev = null;
-                entries[hash] = temp.next;
+                    entries[hash] = temp.next;
+                }
+                ITEMS--;
             }
             else {
-                if(temp.next != null) temp.next.prev = temp.prev;   //esborrem temp, per tant actualitzem l'anterior al següent
-                temp.prev.next = temp.next;                         //esborrem temp, per tant actualitzem el següent de l'anterior
+                if(temp.next != null){
+                    temp.next.prev = temp.prev;                       //esborrem temp, per tant actualitzem l'anterior al següent
+                    temp.prev.next = temp.next;                       //esborrem temp, per tant actualitzem el següent de l'anterior
+                }
+                else if (temp.next == null){
+                    temp.prev.next = null;
+                    temp.prev = null;
+                }
+
+                ITEMS--;
             }
-            //Le resto uno a los items
-            ITEMS--;
         }
     }
 
