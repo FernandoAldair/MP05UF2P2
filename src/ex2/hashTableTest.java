@@ -1,10 +1,10 @@
-package ex1;
+package ex2;
 
 import org.junit.jupiter.api.Assertions;
 
 class hashTableTest {
 
-    //Hay "6" errores:
+    //Hay 6 errores:
     //Errores encontrados:
     //- put:
     //  1- No suma
@@ -20,9 +20,7 @@ class hashTableTest {
     @org.junit.jupiter.api.Test
     void count_size() {
         HashTable hashTable = new HashTable();
-        //comprueba que no hay ningun dato dentro del HashTable
-        Assertions.assertEquals(0,hashTable.count());
-        //Comprueba que hay 16 posiciones en el hashtable
+        Assertions.assertEquals(0,hashTable.count());//comprueba que no hay ningun dato dentro del HashTable
         Assertions.assertEquals(16,hashTable.size());
         hashTable.put("1","mundo1");
         hashTable.put("2","mundo2");
@@ -49,6 +47,9 @@ class hashTableTest {
                 " bucket[4] = [4, mundo4]",hashTable.toString());
 
         //si la key tiene 6 digitos hash es negativo (teoria)
+        hashTable.put("test10","asdasda");
+
+        //Valor se duplica
 
     }
 
@@ -69,30 +70,8 @@ class hashTableTest {
                 " bucket[2] = [2, mundo2] -> [13, mundo13]\n" +
                 " bucket[3] = [3, mundo3]\n" +
                 " bucket[4] = [4, mundo4]",hashTable.toString());
+
     }
-
-    @org.junit.jupiter.api.Test
-    void putMismaKey() {
-        HashTable hashTable = new HashTable();
-
-        Assertions.assertEquals("",hashTable.toString());
-        hashTable.put("1","mundo1");
-        hashTable.put("2","mundo2");
-        hashTable.put("3","mundo3");
-        hashTable.put("4","mundo4");
-
-        hashTable.put("13","mundo13");
-        //El nodo numero 2 se actualiza
-        hashTable.put("2","otra cosa");
-
-        Assertions.assertEquals("\n" +
-                " bucket[1] = [1, mundo1]\n" +
-                " bucket[2] = [2, otra cosa] -> [13, mundo13]\n" +
-                " bucket[3] = [3, mundo3]\n" +
-                " bucket[4] = [4, mundo4]",hashTable.toString());
-    }
-
-
 
     @org.junit.jupiter.api.Test
     void getSinColision() {
@@ -121,15 +100,8 @@ class hashTableTest {
 
         Assertions.assertEquals("otra_cosa",hashTable.get("3"));
 
-    }
-
-    @org.junit.jupiter.api.Test
-    void getNoExiste() {
-        //No puedes borrar algo que no existe
-        HashTable hashTable = new HashTable();
-        hashTable.put("1","mundo1");
-        hashTable.get("12");
-        Assertions.assertEquals(null,hashTable.get("12"));
+        //Error no existe
+//        Assertions.assertEquals("", hashTable.get("6"));
     }
 
     @org.junit.jupiter.api.Test
@@ -205,5 +177,13 @@ class hashTableTest {
         hashTable.drop("23");
     }
 
-
+    @org.junit.jupiter.api.Test
+    void get12() {
+        //No puedes borrar algo que no existe
+        HashTable hashTable = new HashTable();
+        hashTable.put("1","mundo1");
+        hashTable.get("12");
+        hashTable.get("23");
+        Assertions.assertEquals(null,hashTable.get("12"));
+    }
 }

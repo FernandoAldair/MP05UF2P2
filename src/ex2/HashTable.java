@@ -1,4 +1,4 @@
-package ex1;
+package ex2;
 
 // Original source code: https://gist.github.com/amadamala/3cdd53cb5a6b1c1df540981ab0245479
 // Modified by Fernando Porrino Serrano for academic purposes.
@@ -32,7 +32,8 @@ public class HashTable {
     public void put(String key, String value) {
         int hash = getHash(key);
         final HashEntry hashEntry = new HashEntry(key, value);
-        //si el hash esta vacio lo añadimos
+        //ssi el hash esta vacio lo añadimos
+        //-->
         if(entries[hash] == null) {
             entries[hash] = hashEntry;
             //Añade un Item para que el contador sume
@@ -43,20 +44,18 @@ public class HashTable {
             //Si la key es igual a la key que quiero añadir la actualiza
             if (entries[hash].key.equals(hashEntry.key)){
                 //Se actualiza la tabla
-                entries[hash].value = hashEntry.value;
-            }
-
-            else {
+                entries[hash] = hashEntry;
+            }else {
                 while(temp.next != null)
                     temp = temp.next;
-                    temp.next = hashEntry;
-                    hashEntry.prev = temp;
 
+                temp.next = hashEntry;
+                hashEntry.prev = temp;
                 ITEMS++;
             }
-        }
+        }//<--
     }
-    //ORIGINAL
+
 //    public void put(String key, String value) {
 //        int hash = getHash(key);
 //        final HashEntry hashEntry = new HashEntry(key, value);
@@ -85,8 +84,8 @@ public class HashTable {
         if(entries[hash] != null) {
             HashEntry temp = entries[hash];
             HashEntry tempnull = entries[hash];
-            while( !temp.key.equals(key) && tempnull.next != null)
-                temp = temp.next;
+            //While extraido
+            temp = leer(key, temp, tempnull);
 
             if (temp.key.equals(key)){
                 return temp.value;
@@ -123,10 +122,8 @@ public class HashTable {
             HashEntry temp = entries[hash];
             HashEntry tempnull = entries[hash];
             //Comprueba que la key que esta leyendo no sea igual que la key seleccionada
-            while(!temp.key.equals(key) && tempnull.next != null)// si hay una linea creada no hace nada
-                //si hay una key dentro la busca y si
-                //Pasa a la siguiente key
-                    temp = temp.next;
+            //While extraido
+            temp = leer(key, temp, tempnull);
 
 
             //Borrar el primero
@@ -157,7 +154,15 @@ public class HashTable {
             }
         }
     }
-      // ORIGINAL
+
+    private HashEntry leer(String key, HashEntry temp, HashEntry tempnull) {
+        while (!temp.key.equals(key) && tempnull.next != null)// si hay una linea creada no hace nada
+            //si hay una key dentro la busca y si
+            //Pasa a la siguiente key
+            temp = temp.next;
+        return temp;
+    }
+    // ORIGINAL
 //    public void drop(String key) {
 //        int hash = getHash(key);
 //
@@ -302,21 +307,7 @@ public class HashTable {
         return  foundKeys;
     }
 
-    public static void main(String[] args)  {
-        HashTable hashTable = new HashTable();
-
-        // Put some key values.
-        for (int i = 0; i < 30; i++) {
-            final String key = String.valueOf(i);
-            hashTable.put(key, key);
-        }
-        // Print the HashTable structure
-        HashTable.log("****   HashTable  ***");
-        HashTable.log(hashTable.toString());
-        HashTable.log("\nValue for key(20) : " + hashTable.get("20"));
-    }
-
-    private static void log(String msg) {
+    protected static void log(String msg) {
         System.out.println(msg);
     }
 }
