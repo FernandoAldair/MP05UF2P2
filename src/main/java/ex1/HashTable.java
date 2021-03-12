@@ -84,8 +84,7 @@ public class HashTable {
         int hash = getHash(key);
         if(entries[hash] != null) {
             HashEntry temp = entries[hash];
-            HashEntry tempnull = entries[hash];
-            while( !temp.key.equals(key) && tempnull.next != null)
+            while( !temp.key.equals(key) && temp.next != null)
                 temp = temp.next;
 
             if (temp.key.equals(key)){
@@ -121,9 +120,8 @@ public class HashTable {
         if(entries[hash] != null) {
 
             HashEntry temp = entries[hash];
-            HashEntry tempnull = entries[hash];
             //Comprueba que la key que esta leyendo no sea igual que la key seleccionada
-            while(!temp.key.equals(key) && tempnull.next != null)// si hay una linea creada no hace nada
+            while(!temp.key.equals(key) && temp.next != null)// si hay una linea creada no hace nada
                 //si hay una key dentro la busca y si
                 //Pasa a la siguiente key
                     temp = temp.next;
