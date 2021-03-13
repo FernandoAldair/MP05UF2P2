@@ -10,16 +10,17 @@ class hashTableTest {
     //  1- No suma
     //  2- Se duplica
     //- get:
-    //  3- buscar algo inexistente
+    //  3- error al buscar algo inexistente
     //  4- imprime algo inexistente
     //- drop
     //  5- No resta
     //  6- Borra una fila entera si el elemento que queremos borrar es el primero
-    //  7- Borrar algo que no existe
+    //  7- error al borrar algo que no existe
 
     @org.junit.jupiter.api.Test
     void count_size() {
         HashTable hashTable = new HashTable();
+
         //comprueba que no hay ningun dato dentro del HashTable
         Assertions.assertEquals(0,hashTable.count());
         //Comprueba que hay 16 posiciones en el hashtable
