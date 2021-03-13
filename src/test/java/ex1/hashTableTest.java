@@ -24,14 +24,18 @@ class hashTableTest {
         Assertions.assertEquals(0,hashTable.count());
         //Comprueba que hay 16 posiciones en el hashtable
         Assertions.assertEquals(16,hashTable.size());
+        //        hashTable.put("test10","mundo4");
         hashTable.put("1","mundo1");
         hashTable.put("2","mundo2");
         hashTable.put("3","mundo3");
         Assertions.assertEquals(3,hashTable.count());
         Assertions.assertEquals(16,hashTable.size());
 
-    }
+        //hashTable.put("test10","mundo4");
+        //un error que no se solucionar
+        // la key es superior a 6 digitos
 
+    }
 
     @org.junit.jupiter.api.Test
     void putSinColision() {
@@ -42,13 +46,13 @@ class hashTableTest {
         hashTable.put("2","mundo2");
         hashTable.put("3","mundo3");
         hashTable.put("4","mundo4");
+
+
         Assertions.assertEquals("\n" +
                 " bucket[1] = [1, mundo1]\n" +
                 " bucket[2] = [2, mundo2]\n" +
                 " bucket[3] = [3, mundo3]\n" +
                 " bucket[4] = [4, mundo4]",hashTable.toString());
-
-        //si la key tiene 6 digitos hash es negativo (teoria)
 
     }
 
@@ -97,39 +101,16 @@ class hashTableTest {
     @org.junit.jupiter.api.Test
     void getSinColision() {
         HashTable hashTable = new HashTable();
-
         hashTable.put("1","mundo1");
         hashTable.put("2","mundo2");
         hashTable.put("3","mundo3");
         hashTable.put("4","mundo4");
 
-        Assertions.assertEquals("\n" +
-                " bucket[1] = [1, mundo1]\n" +
-                " bucket[2] = [2, mundo2]\n" +
-                " bucket[3] = [3, mundo3]\n" +
-                " bucket[4] = [4, mundo4]",hashTable.toString());
-
         hashTable.put("2","otra_cosa");
         hashTable.put("3","otra_cosa");
 
-        Assertions.assertEquals("\n" +
-                " bucket[1] = [1, mundo1]\n" +
-                " bucket[2] = [2, otra_cosa]\n" +
-                " bucket[3] = [3, otra_cosa]\n" +
-                " bucket[4] = [4, mundo4]",hashTable.toString());
-
-
+        Assertions.assertEquals("mundo1",hashTable.get("1"));
         Assertions.assertEquals("otra_cosa",hashTable.get("3"));
-
-    }
-
-    @org.junit.jupiter.api.Test
-    void getNoExiste() {
-        //No puedes borrar algo que no existe
-        HashTable hashTable = new HashTable();
-        hashTable.put("1","mundo1");
-        hashTable.get("12");
-        Assertions.assertEquals(null,hashTable.get("12"));
     }
 
     @org.junit.jupiter.api.Test
@@ -151,8 +132,15 @@ class hashTableTest {
     }
 
     @org.junit.jupiter.api.Test
+    void getNoExiste() {
+        HashTable hashTable = new HashTable();
+        hashTable.put("1","mundo1");
+        hashTable.get("12");
+        Assertions.assertEquals(null,hashTable.get("12"));
+    }
+
+    @org.junit.jupiter.api.Test
     void drop() {
-        //No puedes borrar algo que no existe
         HashTable hashTable = new HashTable();
         hashTable.put("1","mundo1");
         hashTable.put("2","mundo2");
@@ -200,6 +188,7 @@ class hashTableTest {
     void dropAlgoinexistente() {
         //No puedes borrar algo que no existe
         HashTable hashTable = new HashTable();
+
         hashTable.put("1","mundo1");
         hashTable.put("12","mundo1");
         hashTable.drop("23");

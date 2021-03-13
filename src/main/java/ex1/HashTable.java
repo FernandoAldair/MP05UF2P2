@@ -84,12 +84,17 @@ public class HashTable {
         int hash = getHash(key);
         if(entries[hash] != null) {
             HashEntry temp = entries[hash];
+            //No continua lleyendo
             while( !temp.key.equals(key) && temp.next != null)
                 temp = temp.next;
-
+            //si lo encuentra retorna el valor
             if (temp.key.equals(key)){
                 return temp.value;
-            }else return null;
+
+            }
+            //devuelve un error erroneo, devuelve el valor de la primera colision en vez e la que buscamos
+            //Si no lo encuentra retorna null
+            else return null;
         }
 
         return null;
@@ -133,25 +138,28 @@ public class HashTable {
                 //si hay algo despues
                 if (temp.next == null){
                     entries[hash] = null; //borra un unico elemento
+                    ITEMS--;
                 }
                 else if (temp.next != null) {
                     //la key principal pasa a ser la siguiente y el prev pasa a ser null
                     temp.next.prev = null;
                     entries[hash] = temp.next;
+                    ITEMS--;
                 }
-                ITEMS--;
+
             }
             else {
                 if(temp.next != null){
                     temp.next.prev = temp.prev;                       //esborrem temp, per tant actualitzem l'anterior al següent
                     temp.prev.next = temp.next;                       //esborrem temp, per tant actualitzem el següent de l'anterior
+                    ITEMS--;
                 }
                 else if (temp.next == null){
                     temp.prev.next = null;
                     temp.prev = null;
+                    ITEMS--;
                 }
 
-                ITEMS--;
             }
         }
     }
